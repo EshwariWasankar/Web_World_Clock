@@ -1,0 +1,323 @@
+World Clock Dashboard - Project Documentation
+===========================================
+
+1. Project Overview
+-------------------
+This project is a React-based real-time world clock dashboard. It presents a polished, professional interface that combines:
+- an analog clock
+- a digital clock
+- multiple timezone displays
+- dynamic UI controls
+- an alarm system
+
+The goal of the project is to simulate a modern world clock dashboard that updates live and gives users the ability to monitor time across several regions in one place.
+
+2. What the Application Does
+-----------------------------
+The application displays the current time and date for a selected timezone, while also showing a list of popular global cities and their live times. It includes interactive controls that let the user:
+- choose a timezone
+- toggle seconds visibility
+- switch between dark and light themes
+- add alarms
+- arm or remove alarms
+
+The app updates every second using React state and browser timers.
+
+3. Project Structure
+--------------------
+The main files in this project are:
+
+- package.json
+  This file contains project metadata, scripts, dependencies, and development tools.
+  It defines commands such as:
+  - npm run dev : starts the development server
+  - npm run build : builds the app for production
+  - npm test : runs the test suite
+
+- index.html
+  The base HTML page that loads the React app into the root element.
+
+- src/main.jsx
+  This is the entry point of the React application.
+  It imports React, renders the App component into the DOM, and applies the main stylesheet.
+
+- src/App.jsx
+  This is the main component of the project.
+  It contains the entire dashboard UI, state management, timer logic, timezone management, and alarm handling.
+
+- src/clockUtils.js
+  This file contains utility functions used to format time and date values for different timezones.
+  It makes the application more modular and reusable.
+
+- src/clockUtils.test.js
+  This file contains tests for the utility functions.
+  It verifies that the time formatting and alarm-trigger logic work correctly.
+
+- src/styles.css
+  This file contains all visual styling for the dashboard.
+  It controls layout, spacing, colors, clock visuals, responsive behavior, theme styles, and component appearance.
+
+4. Features Implemented and Where They Are Located
+--------------------------------------------------
+
+4.1 Live Analog Clock
+Location: src/App.jsx
+
+How it works:
+- The app keeps a live Date object in state.
+- Every second, the state is updated with a timer.
+- The current hour, minute, and second values are extracted from the selected timezone.
+- These values are converted into angles and used to rotate the clock hands.
+
+What is implemented:
+- A circular analog clock display
+- Hour hand, minute hand, and second hand
+- Real-time movement that updates once per second
+
+4.2 Live Digital Clock
+Location: src/App.jsx
+
+How it works:
+- The app uses the formatTime function from src/clockUtils.js.
+- The formatted string is displayed as the digital time.
+- The time shown is based on the currently selected timezone.
+
+What is implemented:
+- A large digital time display
+- Current date display underneath the time
+- Optional seconds display based on the toggle control
+
+4.3 Multiple Timezone Support
+Location: src/App.jsx
+
+How it works:
+- The app uses a predefined list of timezones.
+- The selected timezone is stored in React state.
+- When the user changes the timezone selection, the displayed clock updates instantly.
+- A list of world cities is also shown with their local time and date.
+
+What is implemented:
+- Dropdown selection for different global timezones
+- Live display for each listed city
+- Current selected timezone highlighted in the UI
+
+4.4 Theme Toggle
+Location: src/App.jsx and src/styles.css
+
+How it works:
+- A theme state variable controls whether the app is in dark or light mode.
+- Clicking the Theme button toggles the state.
+- CSS classes are applied based on the current theme value.
+
+What is implemented:
+- Dark theme by default
+- Light theme toggle option
+- Theme-dependent colors for cards, text, and panels
+
+4.5 Seconds Visibility Toggle
+Location: src/App.jsx
+
+How it works:
+- A boolean state variable controls whether seconds should be visible in the digital time display.
+- Clicking the Seconds button toggles this value.
+- The digital clock format changes accordingly.
+
+What is implemented:
+- A button to show or hide seconds
+- Dynamic time rendering based on current state
+
+4.6 12-Hour / 24-Hour Toggle
+Location: src/App.jsx and src/clockUtils.js
+
+How it works:
+- A state value controls whether the digital clock should use 24-hour or 12-hour formatting.
+- Clicking the format button switches between the two modes.
+- The shared formatter applies the selected style to the main clock and the timezone list.
+
+What is implemented:
+- A clock format toggle button in the control bar
+- Dynamic digital time formatting based on the selected mode
+- Consistent time rendering across the dashboard
+
+4.7 Alarm Feature
+Location: src/App.jsx
+
+How it works:
+- The app stores a list of alarms in React state.
+- The user selects an hour and minute from a digital time-picker style UI.
+- Clicking Add Alarm creates a new alarm entry using the selected timezone.
+- Each alarm can be armed and removed.
+- A useEffect hook checks the current time against the alarm time every second.
+- When a match occurs, an alert is shown.
+
+What is implemented:
+- Digital hour and minute selectors for alarm creation
+- Alarm creation button
+- Alarm list display
+- Arm button to activate an alarm
+- Remove button to delete an alarm
+- Live alarm trigger check
+
+5. How the React Components Work
+--------------------------------
+The app is built using a single main functional component, App. The project uses React hooks to manage state and side effects.
+
+5.1 App Component
+Location: src/App.jsx
+
+Purpose:
+The App component is the primary container for the entire application.
+
+Responsibilities:
+- stores the current date and time
+- manages timezone selection
+- handles theme and seconds settings
+- manages alarm state and alarm input
+- renders all layout sections and UI elements
+
+Why it is important:
+This is the central component that brings together all features into a single dashboard experience.
+
+5.2 React Hooks Used
+The following React hooks are used inside the App component:
+
+- useState
+  Used to store values such as:
+  - the current date/time
+  - selected timezone
+  - current theme
+  - whether seconds are visible
+  - whether the clock uses 12-hour or 24-hour display
+  - alarms array
+  - alarm hour and minute selection
+  - active alarm ID
+
+- useEffect
+  Used to:
+  - update the clock every second
+  - monitor alarms and trigger them when the current time matches
+
+- useMemo
+  Used to avoid unnecessary recalculations for values derived from state, such as:
+  - the current clock parts for the selected timezone
+  - the label for the selected timezone
+
+6. Utility Functions Explained
+-----------------------------
+The file src/clockUtils.js contains reusable helper functions.
+
+6.1 formatTime(date, timeZone, includeSeconds, use24Hour)
+Purpose:
+Formats the current date into a human-readable time string for a specified timezone.
+
+How it works:
+- It uses Intl.DateTimeFormat from JavaScript.
+- This allows the app to format time correctly according to a timezone without manual calculations.
+- The includeSeconds parameter controls whether seconds are shown.
+- The use24Hour parameter switches between 24-hour and 12-hour formatting.
+
+6.2 formatDate(date, timeZone)
+Purpose:
+Formats the current date into a readable date string for a specific timezone.
+
+How it works:
+- It uses Intl.DateTimeFormat to show values such as weekday, month, day, and year.
+
+6.3 getTimeParts(date, timeZone)
+Purpose:
+Extracts the hour, minute, and second values for a given timezone.
+
+How it works:
+- It converts the incoming date into the required timezone using the browser’s locale and timezone APIs.
+- These values are then used to rotate the analog clock hands.
+
+6.4 shouldTriggerAlarm(alarm, currentDate, timeZone)
+Purpose:
+Determines whether an alarm should trigger.
+
+How it works:
+- It compares the current time in the given timezone with the alarm’s time string.
+- If they match, the alarm is treated as triggered.
+
+7. Styling and UI Structure
+---------------------------
+The styling is defined in src/styles.css.
+
+It includes:
+- a dark-themed app background
+- glass-like panels and cards
+- rounded corners and spacing
+- responsive layout for smaller screens
+- animated clock hand styling
+- light-theme overrides
+- styled selectors for the alarm time-picker UI
+
+The UI is organized into:
+- a header with title and controls
+- a main clock card section
+- a side panel for timezone list and alarms
+
+8. How All Features Work Together
+---------------------------------
+The dashboard works by combining React state, browser timers, and reusable utility functions.
+
+Flow of the app:
+1. The App component starts with a current Date object.
+2. A timer updates that Date object every second.
+3. The app uses this updated date to compute the display time for the selected timezone.
+4. The analog clock uses calculated angles from the current time.
+5. The digital clock uses formatted strings from the utility functions.
+6. The timezone dropdown changes which timezone is currently displayed.
+7. The theme and seconds toggles update visual behavior instantly.
+8. The alarm system checks the current time each second and triggers when a match is found.
+
+9. Testing
+----------
+9. Testing
+----------
+The project includes tests in src/clockUtils.test.js.
+
+The tests verify:
+- time formatting works correctly for a timezone
+- 12-hour formatting works correctly
+- alarm triggering logic behaves as expected
+
+This ensures that the utility logic is reliable even before the UI is rendered.
+
+10. Docker Setup
+----------------
+The project can also be run using Docker so it works consistently across different environments.
+
+Files added for Docker support:
+- Dockerfile
+  This file defines the container image for the React app.
+  It installs dependencies and starts the Vite development server.
+
+- .dockerignore
+  This excludes unnecessary files such as node_modules and build output from the image.
+
+- docker-compose.yml
+  This file defines the container service and exposes port 5173 for access in the browser.
+
+How to run with Docker:
+1. Make sure Docker Desktop is running.
+2. Open a terminal in the project folder.
+3. Run:
+   docker compose up --build
+4. Open the app in your browser at:
+   http://localhost:5173/
+
+If Docker Desktop is not running, the command will fail because the Docker engine cannot be reached.
+
+11. Summary
+-----------
+This project demonstrates a complete React application that combines:
+- real-time clock display
+- analog and digital time rendering
+- timezone switching
+- modern UI controls
+- an interactive alarm system
+- 12-hour and 24-hour display selection
+- Docker-based execution support
+
+It is a strong example of how React state, hooks, utility functions, CSS, and containerization can be combined to build a rich, interactive dashboard experience.

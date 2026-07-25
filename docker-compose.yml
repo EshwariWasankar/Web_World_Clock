@@ -1,0 +1,7 @@
+services:
+  world-clock-dashboard:
+    build: .
+    ports:
+      - "5173:5173"
+    working_dir: /app
+    command: npm run dev -- --host 0.0.0.0
